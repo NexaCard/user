@@ -333,7 +333,7 @@ import CheckoutManualForm from '../components/checkout/CheckoutManualForm.vue'
 import EmptyState from '../components/EmptyState.vue'
 import SmartImage from '../components/SmartImage.vue'
 import CheckoutSteps from '../components/checkout/CheckoutSteps.vue'
-import { useLocalized } from '../composables/useProduct'
+import { useLocalized, useProductLabels } from '../composables/useProduct'
 
 const router = useRouter()
 const route = useRoute()
@@ -344,6 +344,7 @@ const userAuthStore = useUserAuthStore()
 const { t } = useI18n()
 
 const { getLocalizedText, siteCurrency, formatPrice } = useLocalized()
+const { resolveWholesalePriceAmount } = useProductLabels()
 
 const isBuyNowMode = computed(() => route.query.mode === 'buynow')
 const cartItems = computed<CartItem[]>(() => {
@@ -533,6 +534,17 @@ const previewItemsByKey = computed(() => {
   const items = Array.isArray(preview.value?.items) ? preview.value.items : []
   for (const item of items) {
     map.set(`${item.product_id}:${normalizeSkuId(item.sku_id)}`, item)
+  }
+  return map
+})
+
+const cartProductQuantities = computed(() => {
+  const map = new Map<number, number>()
+  for (const item of cartItems.value) {
+    const productId = Number(item.productId || 0)
+    const qty = parseInteger(item.quantity)
+    if (!Number.isFinite(productId) || productId <= 0 || qty === null || qty <= 0) continue
+    map.set(productId, (map.get(productId) || 0) + qty)
   }
   return map
 })
@@ -1254,22 +1266,13 @@ const cartItemSubtotalCents = (item: CartItem) => {
 }
 
 const cartItemWholesaleSubtotalCents = (item: CartItem) => {
-  const baseCents = amountToCents(item.priceAmount)
   const qty = parseInteger(item.quantity)
-  if (baseCents === null || qty === null || qty <= 0 || !Array.isArray(item.wholesalePrices)) {
+  if (qty === null || qty <= 0 || !Array.isArray(item.wholesalePrices)) {
     return null
   }
-  let matchedPriceCents: number | null = null
-  let matchedQuantity = 0
-  for (const tier of item.wholesalePrices) {
-    const minQuantity = Number((tier as any)?.min_quantity || 0)
-    const unitPriceCents = amountToCents((tier as any)?.unit_price)
-    if (!Number.isFinite(minQuantity) || minQuantity <= 0 || unitPriceCents === null) continue
-    if (qty >= minQuantity && minQuantity > matchedQuantity && unitPriceCents < baseCents) {
-      matchedQuantity = minQuantity
-      matchedPriceCents = unitPriceCents
-    }
-  }
+  const productId = Number(item.productId || 0)
+  const matchQuantity = cartProductQuantities.value.get(productId) || qty
+  const matchedPriceCents = amountToCents(resolveWholesalePriceAmount(item, item.priceAmount, matchQuantity))
   if (matchedPriceCents === null) return null
   return matchedPriceCents * qty
 }

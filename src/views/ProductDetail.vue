@@ -123,7 +123,7 @@
                     <span v-if="(selectedSku && hasSkuPromotionPrice(selectedSku)) || (!selectedSku && hasPromotionPrice(product))" class="theme-badge theme-badge-danger">
                       {{ t('products.promotionTag') }}
                     </span>
-                    <span v-if="hasMemberPrice" class="theme-badge bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+                    <span v-if="showSelectedSkuMemberBadge" class="theme-badge bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
                       {{ t('products.memberPriceTag') }}
                     </span>
                     <span v-if="hasSelectedSkuWholesalePrice" class="theme-badge theme-badge-success">
@@ -153,18 +153,18 @@
                   <!-- 选中 SKU 且有促销价 -->
                   <div v-else-if="selectedSku && hasSkuPromotionPrice(selectedSku)" class="space-y-2">
                     <div class="flex flex-wrap items-end gap-4">
-                      <span v-if="hasMemberPrice && selectedSkuMemberPrice! < Number(getSkuPromotionPriceAmount(selectedSku))" class="theme-price-lg text-amber-600 dark:text-amber-300">
-                        {{ formatPrice(selectedSkuMemberPrice!, siteCurrency) }}
+                      <span v-if="selectedSkuPromotionFinalIsMember" class="theme-price-lg text-amber-600 dark:text-amber-300">
+                        {{ formatPrice(selectedSkuPromotionFinalPrice!, siteCurrency) }}
                       </span>
                       <span v-else class="theme-price-lg text-rose-600 dark:text-rose-300">
-                        {{ formatPrice(getSkuPromotionPriceAmount(selectedSku), siteCurrency) }}
+                        {{ formatPrice(selectedSkuPromotionPrice!, siteCurrency) }}
                       </span>
                       <span class="theme-price-original">
                         {{ formatPrice(selectedSku.price_amount, siteCurrency) }}
                       </span>
                     </div>
-                    <p v-if="hasMemberPrice && selectedSkuMemberPrice! < Number(getSkuPromotionPriceAmount(selectedSku))" class="text-sm font-medium text-amber-600 dark:text-amber-300">
-                      {{ t('products.memberPriceTag') }} · {{ t('products.saveAmount') }} {{ formatPrice(Number(selectedSku.price_amount) - selectedSkuMemberPrice!, siteCurrency) }}
+                    <p v-if="selectedSkuPromotionFinalIsMember" class="text-sm font-medium text-amber-600 dark:text-amber-300">
+                      {{ t('products.memberPriceTag') }} · {{ t('products.saveAmount') }} {{ formatPrice(Number(selectedSku.price_amount) - Number(selectedSkuPromotionFinalPrice), siteCurrency) }}
                     </p>
                     <p v-else class="text-sm font-medium text-rose-500 dark:text-rose-300">
                       {{ t('products.saveAmount') }} {{ formatPrice(getSkuPromotionSaveAmount(selectedSku), siteCurrency) }}
@@ -464,6 +464,7 @@ import { processHtmlForDisplay } from '../utils/content'
 import { useCartStore } from '../stores/cart'
 import { useBuyNowStore } from '../stores/buyNow'
 import { useUserAuthStore } from '../stores/userAuth'
+import { useUserProfileStore } from '../stores/userProfile'
 import { debounceAsync } from '../utils/debounce'
 import { useHead } from '@unhead/vue'
 // centsToAmount used internally by composable
@@ -482,9 +483,10 @@ const appStore = useAppStore()
 const cartStore = useCartStore()
 const buyNowStore = useBuyNowStore()
 const userAuthStore = useUserAuthStore()
+const userProfileStore = useUserProfileStore()
 
 const { getLocalizedText, siteCurrency, formatPrice } = useLocalized()
-const { getPurchaseTypeLabel, getFulfillmentTypeLabel, getStockBadgeClass, getStockStatusLabel, hasPromotionPrice, getPromotionPriceAmount, getPromotionSaveAmount, hasSkuPromotionPrice, getSkuPromotionPriceAmount, getSkuPromotionSaveAmount, hasPromotionRules, getPromotionRules, hasWholesalePrices, getWholesalePrices, resolveWholesalePriceAmount } = useProductLabels()
+const { getPurchaseTypeLabel, getFulfillmentTypeLabel, getStockBadgeClass, getStockStatusLabel, hasPromotionPrice, getPromotionPriceAmount, getPromotionSaveAmount, hasSkuPromotionPrice, getSkuPromotionPriceAmount, getSkuPromotionSaveAmount, hasPromotionRules, getPromotionRules, hasWholesalePrices, getWholesalePrices, resolveWholesalePriceAmount, resolveMemberPriceAmount } = useProductLabels()
 
 const formatPromotionRule = (rule: any) => {
   const amount = formatPrice(rule.min_amount, siteCurrency.value)
@@ -533,22 +535,27 @@ const userMemberLevelId = computed(() => {
   return Number(userAuthStore.user?.member_level_id || 0)
 })
 
-const getMemberPriceForSku = (skuId: number): number | null => {
-  if (!product.value?.member_prices || !userMemberLevelId.value) return null
-  const prices = product.value.member_prices as Array<{ member_level_id: number; sku_id: number; price_amount: number | string }>
-  // SKU-level override
-  const skuPrice = prices.find((p) => p.member_level_id === userMemberLevelId.value && p.sku_id === skuId)
-  if (skuPrice) return Number(skuPrice.price_amount)
-  // Product-level override (sku_id = 0)
-  const productPrice = prices.find((p) => p.member_level_id === userMemberLevelId.value && p.sku_id === 0)
-  if (productPrice) return Number(productPrice.price_amount)
-  return null
+const currentMemberDiscountRate = computed(() => {
+  if (!userMemberLevelId.value) return 0
+  const level = userProfileStore.memberLevels.find((item: any) => Number(item?.id || 0) === userMemberLevelId.value)
+  return Number(level?.discount_rate || 0)
+})
+
+const ensureMemberLevels = () => {
+  if (userMemberLevelId.value > 0 && userProfileStore.memberLevels.length === 0) {
+    void userProfileStore.loadMemberLevels()
+  }
+}
+
+const getMemberPriceForSku = (skuId: number, basePrice: any): number | null => {
+  const price = resolveMemberPriceAmount(product.value, skuId, basePrice, userMemberLevelId.value, currentMemberDiscountRate.value)
+  return price === null ? null : Number(price)
 }
 
 const selectedSkuMemberPrice = computed(() => {
   if (!selectedSku.value) return null
   const skuId = normalizeSkuId(selectedSku.value.id)
-  return getMemberPriceForSku(skuId)
+  return getMemberPriceForSku(skuId, selectedSku.value.price_amount)
 })
 
 const hasMemberPrice = computed(() => {
@@ -570,15 +577,46 @@ const hasSelectedSkuWholesalePrice = computed(() => {
   return Number(selectedSkuWholesalePrice.value) < comparisonPrice
 })
 
+const selectedSkuWholesaleMemberPrice = computed(() => {
+  if (!product.value || !selectedSku.value || !selectedSkuWholesalePrice.value) return null
+  const skuId = normalizeSkuId(selectedSku.value.id)
+  return getMemberPriceForSku(skuId, selectedSkuWholesalePrice.value)
+})
+
 const selectedSkuWholesaleFinalIsMember = computed(() => {
-  if (!hasSelectedSkuWholesalePrice.value || selectedSkuMemberPrice.value === null || selectedSkuWholesalePrice.value === null) return false
-  return Number(selectedSkuMemberPrice.value) < Number(selectedSkuWholesalePrice.value)
+  return hasSelectedSkuWholesalePrice.value && selectedSkuWholesaleMemberPrice.value !== null
 })
 
 const selectedSkuWholesaleFinalPrice = computed(() => {
   if (!hasSelectedSkuWholesalePrice.value || selectedSkuWholesalePrice.value === null) return null
-  if (selectedSkuWholesaleFinalIsMember.value) return selectedSkuMemberPrice.value
+  if (selectedSkuWholesaleMemberPrice.value !== null) return selectedSkuWholesaleMemberPrice.value
   return selectedSkuWholesalePrice.value
+})
+
+const selectedSkuPromotionPrice = computed(() => {
+  if (!selectedSku.value || !hasSkuPromotionPrice(selectedSku.value)) return null
+  return getSkuPromotionPriceAmount(selectedSku.value)
+})
+
+const selectedSkuPromotionMemberPrice = computed(() => {
+  if (!product.value || !selectedSku.value || selectedSkuPromotionPrice.value === null) return null
+  const skuId = normalizeSkuId(selectedSku.value.id)
+  return getMemberPriceForSku(skuId, selectedSkuPromotionPrice.value)
+})
+
+const selectedSkuPromotionFinalIsMember = computed(() => selectedSkuPromotionMemberPrice.value !== null)
+
+const selectedSkuPromotionFinalPrice = computed(() => {
+  if (selectedSkuPromotionPrice.value === null) return null
+  if (selectedSkuPromotionMemberPrice.value !== null) return selectedSkuPromotionMemberPrice.value
+  return selectedSkuPromotionPrice.value
+})
+
+const showSelectedSkuMemberBadge = computed(() => {
+  if (!selectedSku.value) return false
+  if (hasSelectedSkuWholesalePrice.value) return selectedSkuWholesaleFinalIsMember.value
+  if (hasSkuPromotionPrice(selectedSku.value)) return selectedSkuPromotionFinalIsMember.value
+  return hasMemberPrice.value
 })
 
 const formatWholesaleTier = (tier: any) => {
@@ -877,16 +915,24 @@ const buyNow = () => {
 
 // Mobile bar price display computed properties
 const mobileBarShowMemberPrice = computed(() => {
-  if (!selectedSku.value || !hasMemberPrice.value) return false
-  const promoPrice = hasSkuPromotionPrice(selectedSku.value) ? getSkuPromotionPriceAmount(selectedSku.value) : selectedSku.value.price_amount
-  return selectedSkuMemberPrice.value! < Number(promoPrice)
+  if (!selectedSku.value) return false
+  if (hasSelectedSkuWholesalePrice.value) return selectedSkuWholesaleFinalIsMember.value
+  if (hasSkuPromotionPrice(selectedSku.value)) return selectedSkuPromotionFinalIsMember.value
+  return hasMemberPrice.value
 })
 const mobileBarMemberPriceDisplay = computed(() => {
+  if (hasSelectedSkuWholesalePrice.value && selectedSkuWholesaleFinalIsMember.value) {
+    return formatPrice(selectedSkuWholesaleFinalPrice.value, siteCurrency.value)
+  }
+  if (selectedSku.value && hasSkuPromotionPrice(selectedSku.value) && selectedSkuPromotionFinalIsMember.value) {
+    return formatPrice(selectedSkuPromotionFinalPrice.value, siteCurrency.value)
+  }
   if (!selectedSkuMemberPrice.value) return ''
   return formatPrice(selectedSkuMemberPrice.value, siteCurrency.value)
 })
 const mobileBarShowSkuPromotionPrice = computed(() => {
   if (mobileBarShowMemberPrice.value) return false
+  if (hasSelectedSkuWholesalePrice.value) return false
   return !!selectedSku.value && hasSkuPromotionPrice(selectedSku.value)
 })
 const mobileBarSkuPromotionPriceDisplay = computed(() => {
@@ -1044,6 +1090,11 @@ useHead({
 
 onMounted(() => {
   loadProduct()
+  ensureMemberLevels()
+})
+
+watch(userMemberLevelId, () => {
+  ensureMemberLevels()
 })
 
 watch(
