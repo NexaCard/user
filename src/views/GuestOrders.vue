@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen theme-page pt-24 pb-16">
+  <div class="nexa-front-grid min-h-screen theme-page pt-24 pb-16">
     <div class="container mx-auto px-4">
       <div class="mb-8">
         <h1 class="text-3xl font-black theme-text-primary mb-2 flex items-center gap-3">
@@ -11,7 +11,7 @@
         <p class="theme-text-muted text-sm">{{ t('guestOrders.subtitle') }}</p>
       </div>
 
-      <div class="theme-panel rounded-2xl p-6 mb-8">
+      <div class="nexa-glass rounded-2xl p-6 mb-8">
         <div v-if="hasSavedAuth"
           class="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-xs theme-text-muted theme-surface-soft border rounded-xl px-4 py-3">
           <span>{{ t('guestOrders.savedHint', { email: savedAuth.email || '-' }) }}</span>
@@ -45,7 +45,7 @@
       </div>
 
       <div v-if="orders.length === 0 && !loading"
-        class="theme-panel rounded-2xl p-12 text-center">
+        class="nexa-glass rounded-2xl p-12 text-center">
         <svg class="mx-auto h-16 w-16 mb-4 theme-text-muted opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
         </svg>
@@ -54,7 +54,7 @@
 
       <div v-else class="space-y-4">
         <div v-for="order in orders" :key="order.order_no"
-          class="theme-panel rounded-2xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          class="nexa-glass rounded-2xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <div class="text-xs uppercase tracking-wider theme-text-muted">{{ t('orders.orderNo') }}：{{ order.order_no }}</div>
             <div class="text-lg font-bold theme-text-primary mt-1">{{ formatMoney(order.total_amount,

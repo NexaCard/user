@@ -11,7 +11,7 @@
       </div>
 
       <div
-        class="theme-panel backdrop-blur-xl border rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+        class="nexa-glass border rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
 
         <div v-if="hasIntroduction" class="mb-12">
           <p class="theme-text-secondary text-lg leading-relaxed whitespace-pre-line">

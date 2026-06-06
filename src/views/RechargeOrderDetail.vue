@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen theme-page pt-24 pb-16">
+  <div class="nexa-front-grid min-h-screen theme-page pt-24 pb-16">
     <div class="container mx-auto px-4">
       <div class="mb-8 flex items-center justify-between">
         <div>
@@ -11,7 +11,7 @@
 
       <div v-if="loading" class="h-40 border theme-surface-muted rounded-2xl animate-pulse"></div>
 
-      <div v-else-if="!recharge" class="theme-panel rounded-2xl p-12 text-center">
+      <div v-else-if="!recharge" class="nexa-glass rounded-2xl p-12 text-center">
         <svg class="mx-auto h-12 w-12 theme-text-muted opacity-50 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
         </svg>
@@ -23,7 +23,7 @@
 
       <div v-else class="space-y-6">
         <!-- 头部信息 -->
-        <div class="theme-panel rounded-2xl p-6">
+        <div class="nexa-glass rounded-2xl p-6">
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <div class="text-xs uppercase tracking-wider theme-text-muted">{{ t('personalCenter.wallet.rechargeNoLabel') }}</div>
@@ -43,7 +43,7 @@
         </div>
 
         <!-- 金额明细 -->
-        <div class="theme-panel rounded-2xl p-6">
+        <div class="nexa-glass rounded-2xl p-6">
           <h2 class="text-lg font-bold mb-4">{{ t('rechargeOrder.amountTitle') }}</h2>
           <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
             <div class="theme-surface-soft border rounded-xl p-4">
@@ -66,7 +66,7 @@
         </div>
 
         <!-- 时间信息 -->
-        <div class="theme-panel rounded-2xl p-6">
+        <div class="nexa-glass rounded-2xl p-6">
           <h2 class="text-lg font-bold mb-4">{{ t('rechargeOrder.timeTitle') }}</h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div class="theme-surface-soft border rounded-xl p-4">
@@ -85,13 +85,13 @@
         </div>
 
         <!-- 备注 -->
-        <div v-if="recharge.remark" class="theme-panel rounded-2xl p-6">
+        <div v-if="recharge.remark" class="nexa-glass rounded-2xl p-6">
           <h2 class="text-lg font-bold mb-2">{{ t('rechargeOrder.remarkLabel') }}</h2>
           <p class="text-sm theme-text-muted">{{ recharge.remark }}</p>
         </div>
 
         <!-- 支付区域（仅待支付状态） -->
-        <div v-if="isPending" class="theme-panel rounded-2xl p-6">
+        <div v-if="isPending" class="nexa-glass rounded-2xl p-6">
           <h2 class="text-lg font-bold mb-4">{{ t('rechargeOrder.paymentTitle') }}</h2>
           <div v-if="isPending" class="mb-3 text-xs theme-text-muted">
             {{ t('personalCenter.wallet.pendingHint') }}
@@ -136,7 +136,7 @@
         </div>
 
         <!-- 支付成功提示 -->
-        <div v-if="recharge.status === 'success'" class="theme-panel rounded-2xl p-6 border-l-4 border-green-500">
+        <div v-if="recharge.status === 'success'" class="nexa-glass rounded-2xl p-6 border-l-4 border-green-500">
           <p class="text-sm font-semibold theme-text-primary">{{ t('personalCenter.wallet.rechargeSuccess') }}</p>
         </div>
       </div>

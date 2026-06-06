@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="min-h-screen theme-page flex flex-col">
+  <div id="app" class="nexa-front-shell min-h-screen theme-page flex flex-col">
     <Navbar />
     <main class="flex-1 pb-14 lg:pb-0">
       <ErrorBoundary>

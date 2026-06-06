@@ -1,18 +1,18 @@
 <template>
-  <div class="home-page min-h-screen theme-page">
+  <div class="home-page nexa-front-grid min-h-screen theme-page">
 
     <!-- ==================== LIST MODE ==================== -->
     <template v-if="templateMode === 'list'">
       <!-- Hero Banner (shared with card mode) -->
-      <section v-if="showHeroSection" class="relative z-10 border-b theme-border pt-24 pb-10">
+      <section v-if="showHeroSection" class="relative z-10 pt-24 pb-10">
         <div class="container mx-auto px-4">
-          <div class="relative overflow-hidden rounded-2xl border theme-panel"
+          <div class="nexa-hero-card relative overflow-hidden rounded-2xl border"
             @touchstart="onBannerTouchStart"
             @touchend="onBannerTouchEnd">
             <Transition name="banner-fade" mode="out-in">
               <img v-if="!bannerLoading && heroImage" :src="heroImage" :key="heroImage" class="absolute inset-0 h-full w-full object-cover" />
             </Transition>
-            <div class="absolute inset-0 bg-black/50"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-black/72 via-slate-950/54 to-cyan-950/42"></div>
             <div v-if="bannerLoading" class="relative flex min-h-[200px] flex-col justify-between p-5 sm:min-h-[240px] sm:p-6 md:min-h-[320px] md:p-10">
               <div class="space-y-3">
                 <div class="h-5 w-24 theme-skeleton rounded-full" style="background: rgba(255,255,255,0.35)"></div>
@@ -177,16 +177,16 @@
 
     <!-- ==================== CARD MODE (default) ==================== -->
     <template v-else>
-    <section v-if="showHeroSection" class="relative z-10 border-b theme-border pt-24 pb-10">
+    <section v-if="showHeroSection" class="relative z-10 pt-24 pb-10">
       <div class="container mx-auto px-4">
-        <div class="relative overflow-hidden rounded-2xl border theme-panel"
+        <div class="nexa-hero-card relative overflow-hidden rounded-2xl border"
           @touchstart="onBannerTouchStart"
           @touchend="onBannerTouchEnd">
           <!-- Banner image with fade transition -->
           <Transition name="banner-fade" mode="out-in">
             <img v-if="!bannerLoading && heroImage" :src="heroImage" :key="heroImage" class="absolute inset-0 h-full w-full object-cover" />
           </Transition>
-          <div class="absolute inset-0 bg-black/50"></div>
+          <div class="absolute inset-0 bg-gradient-to-br from-black/74 via-slate-950/56 to-cyan-950/42"></div>
 
             <div v-if="bannerLoading" class="relative flex min-h-[260px] flex-col justify-between p-5 sm:min-h-[320px] sm:p-6 md:min-h-[420px] md:p-12">
             <div class="mb-4 flex items-center justify-end">
@@ -248,7 +248,7 @@
               <button
                 type="button"
                 @click="goToHeroLink"
-                class="inline-flex min-h-[40px] items-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 transition hover:scale-105 sm:min-h-[44px] sm:px-5 sm:py-3"
+                class="inline-flex min-h-[40px] items-center gap-2 rounded-lg bg-cyan-300 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:scale-105 hover:bg-cyan-200 sm:min-h-[44px] sm:px-5 sm:py-3"
               >
                 {{ heroPrimaryButtonText }}
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -258,7 +258,7 @@
               <router-link
                 v-if="!hasHeroLink"
                 to="/products"
-                class="inline-flex min-h-[40px] items-center rounded-lg border border-white/30 px-4 py-2.5 text-sm font-medium text-white transition hover:border-white hover:bg-white/10 sm:min-h-[44px] sm:px-5 sm:py-3"
+                class="inline-flex min-h-[40px] items-center rounded-lg border border-white/30 px-4 py-2.5 text-sm font-medium text-white transition hover:border-cyan-200 hover:bg-white/10 sm:min-h-[44px] sm:px-5 sm:py-3"
               >
                 {{ t('home.featured.viewAll') }}
               </router-link>

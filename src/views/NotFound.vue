@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen theme-page pt-20 pb-16">
+  <div class="nexa-front-grid min-h-screen theme-page pt-20 pb-16">
     <div class="container mx-auto px-4">
-      <div class="max-w-3xl mx-auto mt-12 theme-panel backdrop-blur-xl border rounded-3xl p-8 md:p-12 text-center">
+      <div class="max-w-3xl mx-auto mt-12 nexa-glass border rounded-3xl p-8 md:p-12 text-center">
         <p class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold theme-surface-soft border theme-border theme-text-muted">
           <svg class="w-3.5 h-3.5 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />

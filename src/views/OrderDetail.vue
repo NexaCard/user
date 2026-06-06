@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen theme-page pt-24 pb-16">
+  <div class="nexa-front-grid min-h-screen theme-page pt-24 pb-16">
     <div class="container mx-auto px-4">
       <BreadcrumbNav
         class="mb-6"
@@ -16,7 +16,7 @@
 
       <!-- Loading Skeleton -->
       <div v-if="loading" class="space-y-6">
-        <div class="theme-panel rounded-2xl p-6 space-y-4">
+        <div class="nexa-glass rounded-2xl p-6 space-y-4">
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div class="space-y-2">
               <div class="h-3 w-20 rounded theme-skeleton"></div>
@@ -31,7 +31,7 @@
             </div>
           </div>
         </div>
-        <div class="theme-panel rounded-2xl p-6 space-y-4">
+        <div class="nexa-glass rounded-2xl p-6 space-y-4">
           <div class="h-5 w-28 rounded theme-skeleton"></div>
           <div v-for="i in 2" :key="i" class="flex gap-4">
             <div class="w-16 h-16 rounded-xl theme-skeleton shrink-0"></div>
@@ -53,7 +53,7 @@
       />
 
       <div v-else class="space-y-6">
-        <div class="theme-panel rounded-2xl p-6">
+        <div class="nexa-glass rounded-2xl p-6">
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <div class="text-xs uppercase tracking-wider theme-text-muted">{{ t('orders.orderNo') }}</div>
@@ -81,7 +81,7 @@
           </div>
         </div>
 
-        <div class="theme-panel rounded-2xl p-6">
+        <div class="nexa-glass rounded-2xl p-6">
           <h2 class="text-lg font-bold mb-4">{{ t('orderDetail.amountTitle') }}</h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div class="theme-surface-soft border rounded-xl p-4">
@@ -126,7 +126,7 @@
           </div>
         </div>
 
-        <div v-if="showRefundRecordsCard" class="theme-panel rounded-2xl p-6">
+        <div v-if="showRefundRecordsCard" class="nexa-glass rounded-2xl p-6">
           <h2 class="text-lg font-bold mb-4">{{ t('orderDetail.refundRecordsTitle') }}</h2>
           <div v-if="refundRecords.length > 0" class="overflow-x-auto rounded-xl border border-gray-200/70 dark:border-white/10">
             <table class="min-w-full divide-y divide-gray-200 text-left text-sm dark:divide-white/10">
@@ -152,7 +152,7 @@
           <div v-else class="text-sm theme-text-muted">{{ t('orderDetail.refundRecordsEmpty') }}</div>
         </div>
 
-        <div v-if="showTimeCard" class="theme-panel rounded-2xl p-6">
+        <div v-if="showTimeCard" class="nexa-glass rounded-2xl p-6">
           <h2 class="text-lg font-bold mb-4">{{ t('orderDetail.timeTitle') }}</h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div class="theme-surface-soft border rounded-xl p-4">
@@ -174,7 +174,7 @@
           </div>
         </div>
 
-        <div class="theme-panel rounded-2xl p-6">
+        <div class="nexa-glass rounded-2xl p-6">
           <h2 class="text-lg font-bold mb-4">{{ t('orderDetail.itemsTitle') }}</h2>
           <div v-if="order.items && order.items.length > 0" class="space-y-4">
             <div v-for="(item, idx) in order.items" :key="idx"
@@ -237,7 +237,7 @@
         </div>
 
         <div v-if="order.children && order.children.length > 0"
-          class="theme-panel rounded-2xl p-6">
+          class="nexa-glass rounded-2xl p-6">
           <h2 class="text-lg font-bold mb-4">{{ t('orderDetail.childOrdersTitle') }}</h2>
           <div class="space-y-4">
             <div v-for="child in order.children" :key="child.id"
@@ -377,7 +377,7 @@
         </div>
 
         <div v-if="order.fulfillment"
-          class="theme-panel rounded-2xl p-6">
+          class="nexa-glass rounded-2xl p-6">
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-bold">{{ t('orderDetail.fulfillmentTitle') }}</h2>
             <div class="flex items-center gap-2">

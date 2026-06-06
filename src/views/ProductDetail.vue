@@ -1,6 +1,6 @@
 <template>
   <div
-    class="product-detail-page min-h-screen theme-page pt-24 pb-16">
+    class="product-detail-page nexa-front-grid min-h-screen theme-page pt-24 pb-16">
     <div class="container mx-auto px-4">
       <!-- Loading Skeleton -->
       <div v-if="loading" class="space-y-8">
@@ -44,7 +44,7 @@
 
         <!-- Main Info Card -->
         <div
-          class="theme-panel backdrop-blur-xl border rounded-3xl overflow-hidden mb-8 shadow-2xl">
+          class="nexa-glass border rounded-3xl overflow-hidden mb-8 shadow-2xl">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
             <!-- Product Images (Left) -->
             <ProductImageGallery
@@ -117,7 +117,7 @@
                   </span>
                 </div>
 
-                <div class="mb-8 border-b theme-border pb-8" ref="priceSection">
+                <div class="mb-8 rounded-2xl border theme-border bg-primary-soft/40 p-4 md:p-5" ref="priceSection">
                   <div class="mb-3 flex flex-wrap items-center gap-2">
                     <span class="text-sm theme-text-muted">{{ t('products.price') }}</span>
                     <span v-if="(selectedSku && hasSkuPromotionPrice(selectedSku)) || (!selectedSku && hasPromotionPrice(product))" class="theme-badge theme-badge-danger">
@@ -351,7 +351,7 @@
 
         <!-- Details Content Card -->
         <div v-if="product.content"
-          class="theme-panel backdrop-blur-xl border rounded-3xl overflow-hidden mb-12 p-6 md:p-8 lg:p-12 relative">
+          class="nexa-glass border rounded-3xl overflow-hidden mb-12 p-6 md:p-8 lg:p-12 relative">
           <h2
             class="text-2xl font-bold mb-8 theme-text-primary flex items-center gap-3 border-b theme-border pb-6">
             <span class="w-1.5 h-8 theme-accent-stick rounded-full"></span>
@@ -364,7 +364,7 @@
 
         <!-- Related Posts -->
         <section v-if="relatedPosts.length"
-          class="theme-panel backdrop-blur-xl border rounded-3xl overflow-hidden mb-12 p-6 md:p-8 lg:p-12 relative">
+          class="nexa-glass border rounded-3xl overflow-hidden mb-12 p-6 md:p-8 lg:p-12 relative">
           <h2 class="text-2xl font-bold theme-text-primary mb-8 flex items-center gap-3 border-b theme-border pb-6">
             <span class="w-1.5 h-8 theme-accent-stick rounded-full"></span>
             {{ t('productDetail.relatedPosts') }}

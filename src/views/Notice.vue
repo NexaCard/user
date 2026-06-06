@@ -21,7 +21,7 @@
       <!-- Notices List -->
       <div v-else-if="notices.length > 0" class="max-w-4xl mx-auto space-y-4">
         <article v-for="notice in notices" :key="notice.id"
-          class="group theme-panel backdrop-blur-xl border rounded-2xl p-6 md:p-8 transition-all duration-300 hover:-translate-x-1 hover:shadow-md cursor-pointer flex items-center gap-6"
+          class="group nexa-glass border rounded-2xl p-6 md:p-8 transition-all duration-300 hover:-translate-x-1 hover:shadow-md cursor-pointer flex items-center gap-6"
           @click="goToNotice(notice.slug)">
           <!-- Icon Column -->
           <div

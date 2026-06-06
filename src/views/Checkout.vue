@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen theme-page pt-24 pb-16">
+  <div class="nexa-front-grid min-h-screen theme-page pt-24 pb-16">
     <div class="container mx-auto px-4">
       <div class="mb-8">
         <h1 class="mb-2 text-3xl font-black theme-text-primary">{{ t('checkout.title') }}</h1>
@@ -22,7 +22,7 @@
 
       <div v-else class="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div class="space-y-6 lg:col-span-2">
-          <div class="rounded-2xl border theme-panel p-6">
+          <div class="rounded-2xl border nexa-glass p-6">
             <h2 class="mb-4 text-lg font-bold theme-text-primary">{{ t('checkout.itemsTitle') }}</h2>
             <div class="space-y-4">
               <div
@@ -95,7 +95,7 @@
             :manual-field-error="manualFieldError"
           />
 
-          <div class="rounded-2xl border theme-panel p-6">
+          <div class="rounded-2xl border nexa-glass p-6">
             <h2 class="mb-4 text-lg font-bold theme-text-primary">{{ t('checkout.couponTitle') }}</h2>
             <input
               v-model="couponCode"
@@ -107,7 +107,7 @@
 
           <div
             v-if="!userAuthStore.isAuthenticated"
-            class="space-y-4 rounded-2xl border theme-panel p-6"
+            class="space-y-4 rounded-2xl border nexa-glass p-6"
           >
             <h2 class="text-lg font-bold theme-text-primary">{{ t('checkout.modeTitle') }}</h2>
             <div class="flex flex-wrap gap-3">
@@ -173,7 +173,7 @@
           </div>
         </div>
 
-        <div class="h-fit rounded-2xl border theme-panel p-6 lg:sticky lg:top-24">
+        <div class="h-fit rounded-2xl border nexa-glass p-6 lg:sticky lg:top-24">
           <h2 class="mb-4 text-lg font-bold theme-text-primary">{{ t('checkout.submitTitle') }}</h2>
           <div class="mb-4 rounded-lg border theme-surface-soft p-3 text-xs theme-text-muted">
             {{ t('checkout.submitHint') }}

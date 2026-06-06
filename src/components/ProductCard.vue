@@ -1,6 +1,6 @@
 <template>
   <div
-    class="group relative theme-panel rounded-2xl border transition-all overflow-hidden flex flex-col h-full theme-slide-up"
+    class="nexa-product-card group relative rounded-2xl border transition-all overflow-hidden flex flex-col h-full theme-slide-up"
     :class="isSoldOut(product)
       ? 'cursor-default opacity-85 grayscale-[0.25] saturate-50 border-rose-300/60 dark:border-rose-900/40'
       : 'cursor-pointer theme-card-interactive'"
@@ -8,6 +8,7 @@
     @click="$emit('click', product.slug)">
     <!-- Image Area -->
     <div class="aspect-[4/3] overflow-hidden theme-surface-muted relative shrink-0">
+      <div class="pointer-events-none absolute inset-x-0 top-0 z-20 h-16 bg-gradient-to-b from-black/38 to-transparent"></div>
       <div
         class="absolute inset-0 z-10 transition-colors duration-300"
         :class="isSoldOut(product) ? 'bg-black/15' : 'bg-black/15 group-hover:bg-black/5'"
@@ -48,7 +49,7 @@
       <div v-if="product.category?.name" class="text-xs theme-text-muted uppercase tracking-wider mb-1 md:mb-2 truncate">
         {{ t('products.categoryLabel') }} · {{ getLocalizedText(product.category.name) }}
       </div>
-      <h3 class="text-sm md:text-lg font-bold theme-text-primary mb-1 md:mb-2 transition-colors line-clamp-1">
+      <h3 class="text-sm md:text-lg font-bold theme-text-primary mb-1 md:mb-2 transition-colors line-clamp-1 group-hover:text-primary-hover">
         {{ getLocalizedText(product.title) }}
       </h3>
 
@@ -142,7 +143,7 @@
             class="relative flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-lg border transition-all"
             :class="isSoldOut(product)
               ? 'opacity-40 cursor-not-allowed border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-600'
-              : 'border-gray-200 dark:border-gray-700 text-gray-500 hover:text-gray-900 hover:border-gray-400 hover:bg-gray-100 dark:hover:text-white dark:hover:border-gray-500 dark:hover:bg-gray-800'"
+              : 'border-gray-200 dark:border-gray-700 text-gray-500 hover:text-primary-hover hover:border-primary/40 hover:bg-primary-soft dark:hover:text-primary-hover dark:hover:border-primary/40 dark:hover:bg-primary-soft'"
             :disabled="isSoldOut(product)"
             :aria-disabled="isSoldOut(product)"
             @click.stop="$emit('quickBuy', product)"

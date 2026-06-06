@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen theme-page flex flex-col">
+    class="nexa-front-grid min-h-screen theme-page flex flex-col">
 
     <!-- Navbar is global -->
 

@@ -1,7 +1,7 @@
 <template>
   <div class="relative min-h-screen overflow-hidden theme-page pt-24 pb-16">
     <div class="container relative z-10 mx-auto px-4">
-      <header class="mb-8 rounded-3xl border theme-panel-soft p-6 shadow-xl backdrop-blur-sm lg:p-8">
+      <header class="mb-8 rounded-3xl border nexa-glass-soft p-6 shadow-xl backdrop-blur-sm lg:p-8">
         <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.24em] theme-text-accent">
@@ -38,7 +38,7 @@
 
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-12">
         <aside class="lg:col-span-3">
-          <div class="rounded-2xl border theme-panel-soft p-4 shadow-sm backdrop-blur-sm lg:sticky lg:top-24">
+          <div class="rounded-2xl border nexa-glass-soft p-4 shadow-sm backdrop-blur-sm lg:sticky lg:top-24">
             <div class="hidden flex-col gap-2 lg:flex">
               <button
                 v-for="item in sectionItems"
@@ -96,7 +96,7 @@
 
           <template v-if="currentSection === 'overview'">
             <!-- User info card -->
-            <div class="rounded-2xl border theme-panel-soft p-6 shadow-sm">
+            <div class="rounded-2xl border nexa-glass-soft p-6 shadow-sm">
               <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex items-center gap-4">
                   <div class="flex h-14 w-14 items-center justify-center rounded-2xl theme-selected-surface text-lg font-black theme-text-accent">
@@ -115,7 +115,7 @@
             </div>
 
             <!-- Member level card -->
-            <div v-if="userProfileStore.memberLevels.length > 0" class="rounded-2xl border theme-panel-soft p-6 shadow-sm">
+            <div v-if="userProfileStore.memberLevels.length > 0" class="rounded-2xl border nexa-glass-soft p-6 shadow-sm">
               <!-- Current level header -->
               <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex items-center gap-3.5">
@@ -204,7 +204,7 @@
               </div>
             </div>
 
-            <div class="rounded-2xl border theme-panel-soft p-6 shadow-sm">
+            <div class="rounded-2xl border nexa-glass-soft p-6 shadow-sm">
               <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
                 <h3 class="text-lg font-bold theme-text-primary">{{ t('personalCenter.overview.recentOrdersTitle') }}</h3>
                 <router-link

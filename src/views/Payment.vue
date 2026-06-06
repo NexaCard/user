@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen theme-page pt-24 pb-16">
+  <div class="nexa-front-grid min-h-screen theme-page pt-24 pb-16">
     <div class="container mx-auto px-4">
       <div class="mb-6 flex items-center justify-between">
         <div>
@@ -15,7 +15,7 @@
 
       <!-- Loading Skeleton -->
       <div v-if="loading" class="space-y-6">
-        <div class="theme-panel rounded-2xl p-6 space-y-4">
+        <div class="nexa-glass rounded-2xl p-6 space-y-4">
           <div class="flex items-center justify-between gap-4">
             <div class="space-y-2">
               <div class="h-5 w-40 rounded theme-skeleton"></div>
@@ -38,7 +38,7 @@
       </div>
 
       <div v-else-if="showGuestAuthForm"
-        class="theme-panel rounded-2xl p-6">
+        class="nexa-glass rounded-2xl p-6">
         <h2 class="text-lg font-bold mb-2">{{ t('payment.guestAuthTitle') }}</h2>
         <p class="text-xs theme-text-muted mb-4">{{ t('payment.guestAuthHint') }}</p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -68,7 +68,7 @@
       />
 
       <div v-else-if="showResultView" class="space-y-6">
-        <div class="theme-panel rounded-2xl p-6">
+        <div class="nexa-glass rounded-2xl p-6">
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h2 class="text-xl font-bold theme-text-primary">{{ paymentResultTitle }}</h2>
@@ -162,7 +162,7 @@
       </div>
 
       <div v-else-if="orderExpired || orderCanceled" class="space-y-6">
-        <div class="theme-panel rounded-2xl p-6">
+        <div class="nexa-glass rounded-2xl p-6">
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h2 class="text-xl font-bold theme-text-primary">
@@ -196,7 +196,7 @@
 
       <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2 space-y-6">
-          <div class="theme-panel rounded-2xl p-6">
+          <div class="nexa-glass rounded-2xl p-6">
             <h2 class="text-lg font-bold mb-4 theme-text-primary">{{ t('payment.orderInfo') }}</h2>
             <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
               <div>
@@ -282,7 +282,7 @@
           </div>
 
           <div v-if="orderItems.length"
-            class="theme-panel rounded-2xl p-6">
+            class="nexa-glass rounded-2xl p-6">
             <h2 class="text-lg font-bold mb-4 theme-text-primary">{{ t('payment.itemsTitle') }}</h2>
             <div class="space-y-3 text-sm theme-text-muted">
               <div v-for="(item, idx) in orderItems" :key="idx"
@@ -304,7 +304,7 @@
             </div>
           </div>
 
-          <div class="theme-panel rounded-2xl p-6">
+          <div class="nexa-glass rounded-2xl p-6">
             <h2 class="text-lg font-bold mb-4 theme-text-primary">{{ t('payment.channelTitle') }}</h2>
             <div v-if="!configReady" class="text-sm theme-text-muted">
               {{ t('common.loading') }}
@@ -370,7 +370,7 @@
           </div>
 
           <div v-if="paymentResult"
-            class="theme-panel rounded-2xl p-6">
+            class="nexa-glass rounded-2xl p-6">
             <h2 class="text-lg font-bold mb-4 theme-text-primary">{{ t('payment.infoTitle') }}</h2>
             <div class="text-sm theme-text-secondary space-y-2">
               <div>{{ t('payment.methodLabel') }}：{{ resultChannelName }}</div>
@@ -421,7 +421,7 @@
           </div>
         </div>
 
-        <div class="h-fit rounded-2xl border theme-panel p-6 lg:sticky lg:top-24">
+        <div class="h-fit rounded-2xl border nexa-glass p-6 lg:sticky lg:top-24">
           <h2 class="text-lg font-bold mb-4 theme-text-primary">{{ t('payment.actionTitle') }}</h2>
           <div v-if="showCountdown" class="text-xs theme-text-muted mb-3">
             {{ t('payment.countdownLabel') }}：<span class="font-mono">{{ countdownText }}</span>

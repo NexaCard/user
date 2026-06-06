@@ -1,11 +1,12 @@
 <template>
   <nav
-    class="fixed top-0 left-0 right-0 z-50 theme-panel-soft border-b theme-border backdrop-blur-md transition-all"
+    class="fixed top-0 left-0 right-0 z-50 nexa-glass border-b backdrop-blur-md transition-all"
     :class="scrolled ? 'py-2 shadow-lg' : 'py-4'"
     :style="{ transitionDuration: 'var(--ui-duration-normal)' }">
     <div class="container mx-auto px-4 flex items-center justify-between gap-4">
       <!-- Logo -->
-      <router-link to="/" class="theme-wordmark group relative" :title="brandSiteName">
+      <router-link to="/" class="theme-wordmark group relative gap-2" :title="brandSiteName">
+        <span class="nexa-brand-dot h-7 w-7 text-[11px]">NX</span>
         <span class="theme-wordmark-text">{{ brandSiteName }}</span>
       </router-link>
 
@@ -351,7 +352,7 @@ const cartCount = computed(() => cartStore.totalItems)
 
 const brandSiteName = computed(() => {
   const text = String(appStore.config?.brand?.site_name || '').trim()
-  return text !== '' ? text : 'Dujiao-Next'
+  return text !== '' ? text : 'NexaCard'
 })
 
 const toggleMobileMenu = () => {

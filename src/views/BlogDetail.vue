@@ -26,7 +26,7 @@
         </nav>
 
         <div
-          class="theme-panel backdrop-blur-xl border rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+          class="nexa-glass border rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
           <!-- Featured Image -->
           <div v-if="post.thumbnail" class="mb-12 relative h-64 md:h-96 rounded-2xl overflow-hidden group">
             <img :src="getImageUrl(post.thumbnail)" :alt="getLocalizedText(post.title)"
@@ -106,7 +106,7 @@
 
       <!-- Error State -->
       <div v-else
-        class="text-center py-24 theme-panel rounded-3xl border backdrop-blur-sm">
+        class="text-center py-24 nexa-glass rounded-3xl border backdrop-blur-sm">
         <svg class="w-20 h-20 mx-auto theme-text-muted mb-6" fill="none" stroke="currentColor"
           viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"

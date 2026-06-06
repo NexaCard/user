@@ -39,7 +39,7 @@
       <div v-else-if="posts.length > 0">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <article v-for="post in posts" :key="post.id"
-            class="group theme-panel backdrop-blur-xl border rounded-2xl overflow-hidden hover:bg-gray-50 dark:hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer flex flex-col"
+            class="group nexa-glass border rounded-2xl overflow-hidden hover:bg-gray-50 dark:hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer flex flex-col"
             @click="goToPost(post.slug)">
             <!-- Thumbnail -->
             <div v-if="post.thumbnail" class="h-48 overflow-hidden relative">

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="manualFormProducts.length"
-    class="rounded-2xl border theme-panel p-6"
+    class="rounded-2xl border nexa-glass p-6"
   >
     <h2 class="mb-2 text-lg font-bold theme-text-primary">{{ t('checkout.manualFormTitle') }}</h2>
     <p class="mb-4 text-xs theme-text-muted">{{ t('checkout.manualFormTip') }}</p>
