@@ -13,7 +13,7 @@ export const useAppStore = defineStore('app', () => {
     const serverTimeOffset = ref(0)
     const siteIconHref = computed(() => {
         const siteIcon = String(config.value?.brand?.site_icon || '').trim()
-        return siteIcon ? getImageUrl(siteIcon) : '/dj.svg'
+        return siteIcon ? getImageUrl(siteIcon) : '/nexacard.svg'
     })
 
     // 设置语言

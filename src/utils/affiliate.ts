@@ -2,8 +2,10 @@ import type { RouteLocationNormalizedLoaded, RouteLocationNormalized } from 'vue
 import { affiliateAPI } from '../api'
 import { useAppStore } from '../stores/app'
 
-const AFFILIATE_STORAGE_KEY = 'dj_affiliate_attribution'
-const AFFILIATE_VISITOR_KEY = 'dj_affiliate_visitor_key'
+const AFFILIATE_STORAGE_KEY = 'nexacard_affiliate_attribution'
+const AFFILIATE_VISITOR_KEY = 'nexacard_affiliate_visitor_key'
+const LEGACY_AFFILIATE_STORAGE_KEY = 'dj_affiliate_attribution'
+const LEGACY_AFFILIATE_VISITOR_KEY = 'dj_affiliate_visitor_key'
 const AFFILIATE_TTL_MS = 30 * 24 * 60 * 60 * 1000
 
 type AffiliateAttribution = {
@@ -21,7 +23,7 @@ const normalizeAffiliateCode = (raw: string) => {
 
 const readAttribution = (): AffiliateAttribution | null => {
     if (typeof window === 'undefined') return null
-    const raw = localStorage.getItem(AFFILIATE_STORAGE_KEY)
+    const raw = localStorage.getItem(AFFILIATE_STORAGE_KEY) || localStorage.getItem(LEGACY_AFFILIATE_STORAGE_KEY)
     if (!raw) return null
     try {
         const parsed = JSON.parse(raw) as Partial<AffiliateAttribution>
@@ -30,14 +32,18 @@ const readAttribution = (): AffiliateAttribution | null => {
         const appStore = useAppStore()
         if (!code || !Number.isFinite(expiresAt) || expiresAt <= appStore.getServerTime()) {
             localStorage.removeItem(AFFILIATE_STORAGE_KEY)
+            localStorage.removeItem(LEGACY_AFFILIATE_STORAGE_KEY)
             return null
         }
+        localStorage.setItem(AFFILIATE_STORAGE_KEY, raw)
+        localStorage.removeItem(LEGACY_AFFILIATE_STORAGE_KEY)
         return {
             code,
             expires_at: expiresAt,
         }
     } catch {
         localStorage.removeItem(AFFILIATE_STORAGE_KEY)
+        localStorage.removeItem(LEGACY_AFFILIATE_STORAGE_KEY)
         return null
     }
 }
@@ -55,6 +61,12 @@ const ensureVisitorKey = () => {
     if (typeof window === 'undefined') return ''
     const existing = String(localStorage.getItem(AFFILIATE_VISITOR_KEY) || '').trim()
     if (existing) return existing
+    const legacy = String(localStorage.getItem(LEGACY_AFFILIATE_VISITOR_KEY) || '').trim()
+    if (legacy) {
+        localStorage.setItem(AFFILIATE_VISITOR_KEY, legacy)
+        localStorage.removeItem(LEGACY_AFFILIATE_VISITOR_KEY)
+        return legacy
+    }
     const next = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 12)}`
     localStorage.setItem(AFFILIATE_VISITOR_KEY, next)
     return next
@@ -73,7 +85,7 @@ export const getAffiliateCode = () => {
 
 export const getAffiliateVisitorKey = () => {
     if (typeof window === 'undefined') return ''
-    const existing = String(localStorage.getItem(AFFILIATE_VISITOR_KEY) || '').trim()
+    const existing = String(localStorage.getItem(AFFILIATE_VISITOR_KEY) || localStorage.getItem(LEGACY_AFFILIATE_VISITOR_KEY) || '').trim()
     if (existing) return existing
     return ensureVisitorKey()
 }
@@ -81,6 +93,7 @@ export const getAffiliateVisitorKey = () => {
 export const clearAffiliateCode = () => {
     if (typeof window === 'undefined') return
     localStorage.removeItem(AFFILIATE_STORAGE_KEY)
+    localStorage.removeItem(LEGACY_AFFILIATE_STORAGE_KEY)
 }
 
 export const captureAffiliateFromRoute = async (route: RouteLocationNormalizedLoaded | RouteLocationNormalized) => {

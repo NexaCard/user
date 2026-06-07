@@ -48,7 +48,7 @@ export function processHtmlForStorage(html: string): string {
     let apiHost = ''
     try {
         if (apiBaseUrl) {
-            // 提取域名 (例如 localhost:8080 或 domain.com)
+            // 提取域名 (例如 localhost:5175 或 domain.com)
             apiHost = new URL(apiBaseUrl).host
         } else {
             // 如果未配置 API_BASE_URL，则认为是同源，使用当前域名
@@ -67,7 +67,7 @@ export function processHtmlForStorage(html: string): string {
                 const url = new URL(src)
 
                 // 检查域名是否匹配 API 域名，且路径以 /uploads/ 开头
-                // url.host 会自动处理端口号 (例如 localhost:8080)
+                // url.host 会自动处理端口号 (例如 localhost:5175)
                 if (url.host === apiHost && url.pathname.startsWith('/uploads/')) {
                     // 返回相对路径，例如 src="/uploads/xxx.png"
                     // 始终标准化为双引号
