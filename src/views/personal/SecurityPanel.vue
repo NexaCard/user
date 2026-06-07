@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="space-y-6">
     <div class="theme-personal-card">
       <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -118,7 +118,7 @@ const oldCodeCooldown = ref(0)
 const newCodeCooldown = ref(0)
 const telegramSectionRef = ref<InstanceType<typeof TelegramBindingSection> | null>(null)
 let cooldownTimer: number | null = null
-const telegramCallbackName = '__dujiaoSecurityTelegramBind'
+const telegramCallbackName = '__nexacardSecurityTelegramBind'
 
 const telegramConfig = computed(() => appStore.config?.telegram_auth || null)
 const telegramBotUsername = computed(() => String(telegramConfig.value?.bot_username || '').trim())

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="nexa-front-grid relative flex min-h-screen items-center justify-center theme-page theme-auth-page px-4 py-16 sm:px-6">
     <div class="relative z-10 w-full max-w-lg">
       <div class="mb-4 flex items-center justify-between px-1">
@@ -326,7 +326,7 @@ const { t } = useI18n()
 
 const brandSiteName = computed(() => {
   const siteName = String(appStore.config?.brand?.site_name || '').trim()
-  return siteName !== '' ? siteName : 'Dujiao-Next'
+  return siteName !== '' ? siteName : 'NexaCard'
 })
 
 const email = ref('')
@@ -373,7 +373,7 @@ const showTelegramOidc = computed(() => telegramLoginMode.value === 'oidc' && te
 const showMiniAppLoginHint = computed(() => isTelegramMiniApp.value)
 const telegramMiniAppEntryLink = computed(() => buildTelegramMiniAppEntryLink(telegramBotUsername.value, telegramMiniAppURL.value))
 const showTelegramMiniAppEntry = computed(() => !isTelegramMiniApp.value && telegramMiniAppEntryLink.value !== '')
-const telegramCallbackName = '__dujiaoUserTelegramLogin'
+const telegramCallbackName = '__nexacardUserTelegramLogin'
 const miniAppLoginAttempted = ref(false)
 const attemptingMiniAppLogin = ref(false)
 

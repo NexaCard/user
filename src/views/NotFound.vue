@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="nexa-front-grid min-h-screen theme-page pt-20 pb-16">
     <div class="container mx-auto px-4">
       <div class="max-w-3xl mx-auto mt-12 nexa-glass border rounded-3xl p-8 md:p-12 text-center">
@@ -89,7 +89,7 @@ const appStore = useAppStore()
 
 const brandSiteName = computed(() => {
   const siteName = String(appStore.config?.brand?.site_name || '').trim()
-  return siteName !== '' ? siteName : 'Dujiao-Next'
+  return siteName !== '' ? siteName : 'NexaCard'
 })
 
 const goBack = () => {

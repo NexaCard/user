@@ -1,6 +1,6 @@
-import { ref, watch } from 'vue'
+﻿import { ref, watch } from 'vue'
 
-const TEA_THEME_KEY = 'dujiao_theme'
+const TEA_THEME_KEY = 'nexacard_theme'
 
 type Theme = 'light' | 'dark'
 
