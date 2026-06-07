@@ -334,6 +334,14 @@ html[data-telegram-mini-app="true"] body {
     color: var(--ui-text-primary);
   }
 
+  .hover\:theme-text-primary:hover {
+    color: var(--ui-text-primary);
+  }
+
+  .group:hover .group-hover\:theme-text-primary {
+    color: var(--ui-text-primary);
+  }
+
   .theme-text-secondary {
     color: var(--ui-text-secondary);
   }

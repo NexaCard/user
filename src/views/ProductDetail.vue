@@ -357,7 +357,7 @@
             <span class="w-1.5 h-8 theme-accent-stick rounded-full"></span>
             {{ t('productDetail.details') }}
           </h2>
-          <div v-html="processHtmlForDisplay(getLocalizedText(product.content))"
+          <div v-html="sanitizeHtmlForDisplay(getLocalizedText(product.content))"
             class="prose prose-gray dark:prose-invert prose-lg max-w-none theme-prose">
           </div>
         </div>
@@ -460,7 +460,7 @@ import { useI18n } from 'vue-i18n'
 import { useAppStore } from '../stores/app'
 import { productAPI } from '../api'
 import { getImageUrl } from '../utils/image'
-import { processHtmlForDisplay } from '../utils/content'
+import { sanitizeHtmlForDisplay } from '../utils/content'
 import { useCartStore } from '../stores/cart'
 import { useBuyNowStore } from '../stores/buyNow'
 import { useUserAuthStore } from '../stores/userAuth'

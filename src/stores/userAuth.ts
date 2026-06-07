@@ -2,20 +2,21 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { userAuthAPI } from '../api'
+import { getSessionItem, removeSessionItem, setSessionItem } from '../utils/sessionStorage'
 
 export const useUserAuthStore = defineStore('user-auth', () => {
     const router = useRouter()
 
-    const token = ref<string>(localStorage.getItem('user_token') || '')
-    const storedUser = localStorage.getItem('user_profile')
+    const token = ref<string>(getSessionItem('user_token') || '')
+    const storedUser = getSessionItem('user_profile')
     let parsedUser = null
     try {
         if (storedUser && storedUser !== 'undefined') {
             parsedUser = JSON.parse(storedUser)
         }
     } catch (e) {
-        console.error('Failed to parse user profile from localStorage', e)
-        localStorage.removeItem('user_profile')
+        console.error('Failed to parse user profile from sessionStorage', e)
+        removeSessionItem('user_profile')
     }
     const user = ref<any>(parsedUser)
     const loading = ref(false)
@@ -28,19 +29,19 @@ export const useUserAuthStore = defineStore('user-auth', () => {
 
     const setToken = (newToken: string) => {
         token.value = newToken
-        localStorage.setItem('user_token', newToken)
+        setSessionItem('user_token', newToken)
     }
 
     const setUser = (newUser: any) => {
         user.value = newUser
-        localStorage.setItem('user_profile', JSON.stringify(newUser))
+        setSessionItem('user_profile', JSON.stringify(newUser))
     }
 
     const clearAuth = () => {
         token.value = ''
         user.value = null
-        localStorage.removeItem('user_token')
-        localStorage.removeItem('user_profile')
+        removeSessionItem('user_token')
+        removeSessionItem('user_profile')
     }
 
     const sendVerifyCode = async (payload: any) => {
@@ -184,6 +185,7 @@ export const useUserAuthStore = defineStore('user-auth', () => {
         challengeToken,
         challengeExpiresAt,
         isAuthenticated,
+        setToken,
         sendVerifyCode,
         register,
         login,

@@ -449,6 +449,7 @@ import { copyText } from '../utils/clipboard'
 import { amountToCents, centsToAmount } from '../utils/money'
 import { buildSkuDisplayTextFromSnapshot } from '../utils/sku'
 import { getImageUrl } from '../utils/image'
+import { clearGuestOrderAuth, loadGuestOrderAuth, saveGuestOrderAuth } from '../utils/guestOrderAuth'
 
 const route = useRoute()
 const router = useRouter()
@@ -519,8 +520,7 @@ const refundRecords = computed(() => {
 })
 
 const loadSavedAuth = () => {
-  const saved = localStorage.getItem('guest_order_auth')
-  const savedAuth = saved ? JSON.parse(saved) : {}
+  const savedAuth = loadGuestOrderAuth()
   auth.value = {
     email: savedAuth.email || '',
     order_password: savedAuth.order_password || '',
@@ -790,10 +790,10 @@ onMounted(() => {
 })
 
 const persistAuth = () => {
-  localStorage.setItem('guest_order_auth', JSON.stringify({
+  saveGuestOrderAuth({
     email: auth.value.email,
     order_password: auth.value.order_password,
-  }))
+  })
 }
 
 const handleAuthSubmit = async () => {
@@ -807,7 +807,7 @@ const handleAuthSubmit = async () => {
 }
 
 const clearAuth = () => {
-  localStorage.removeItem('guest_order_auth')
+  clearGuestOrderAuth()
   auth.value = { email: '', order_password: '' }
   order.value = null
   authError.value = t('guestOrderDetail.authRequired')

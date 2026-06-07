@@ -317,8 +317,7 @@ const submitEnable = async () => {
     recoveryCodes.value = data.recovery_codes || []
     if (data.token) {
       // 启用 2FA 后旧 token 已失效，立即用服务端返回的新 token 替换，避免被中间件登出
-      localStorage.setItem('user_token', data.token)
-      userAuthStore.token = data.token
+      userAuthStore.setToken(data.token)
     }
     setupResult.value = null
     qrcodeDataUrl.value = ''

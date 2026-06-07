@@ -484,6 +484,7 @@ import { orderStatusLabel } from '../utils/status'
 import { fulfillmentTypeLabel } from '../utils/fulfillment'
 import { debounceAsync } from '../utils/debounce'
 import { copyText } from '../utils/clipboard'
+import { loadGuestOrderAuth, saveGuestOrderAuth } from '../utils/guestOrderAuth'
 import { amountToCents, basisPointsToPercent, calculateFeeCents, centsToAmount, rateToBasisPoints } from '../utils/money'
 import { buildSkuDisplayTextFromSnapshot } from '../utils/sku'
 import PaymentAmountBreakdown from '../components/payment/PaymentAmountBreakdown.vue'
@@ -1617,8 +1618,7 @@ onMounted(() => {
     return
   }
   if (!orderNoQuery.value) return
-  const saved = localStorage.getItem('guest_order_auth')
-  const savedAuth = saved ? JSON.parse(saved) : {}
+  const savedAuth = loadGuestOrderAuth()
   guestAuth.value = {
     email: savedAuth.email || '',
     order_password: savedAuth.order_password || '',
@@ -1729,10 +1729,10 @@ const handleGuestAuthSubmit = async () => {
     guestAuthError.value = t('payment.guestAuthRequired')
     return
   }
-  localStorage.setItem('guest_order_auth', JSON.stringify({
+  saveGuestOrderAuth({
     email: guestAuth.value.email,
     order_password: guestAuth.value.order_password,
-  }))
+  })
   await debouncedLoadOrder()
 }
 

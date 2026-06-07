@@ -124,6 +124,7 @@ import { useI18n } from 'vue-i18n'
 import { orderStatusClass, orderStatusLabel } from '../utils/status'
 import { debounceAsync } from '../utils/debounce'
 import { amountToCents } from '../utils/money'
+import { clearGuestOrderAuth, loadGuestOrderAuth, saveGuestOrderAuth } from '../utils/guestOrderAuth'
 
 const savedAuth = ref<{ email: string; order_password: string }>({ email: '', order_password: '' })
 const email = ref('')
@@ -141,8 +142,7 @@ const pagination = ref({
 const { t } = useI18n()
 
 const loadSavedAuth = () => {
-  const saved = localStorage.getItem('guest_order_auth')
-  const parsed = saved ? JSON.parse(saved) : {}
+  const parsed = loadGuestOrderAuth()
   savedAuth.value = {
     email: parsed.email || '',
     order_password: parsed.order_password || '',
@@ -158,12 +158,12 @@ const persistAuth = () => {
     email: email.value,
     order_password: orderPassword.value,
   }
-  localStorage.setItem('guest_order_auth', JSON.stringify(payload))
+  saveGuestOrderAuth(payload)
   savedAuth.value = payload
 }
 
 const clearSaved = () => {
-  localStorage.removeItem('guest_order_auth')
+  clearGuestOrderAuth()
   savedAuth.value = { email: '', order_password: '' }
   email.value = ''
   orderPassword.value = ''

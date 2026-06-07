@@ -1,4 +1,5 @@
 import i18n from '../i18n'
+import { getSessionItem, removeSessionItem } from '../utils/sessionStorage'
 
 export const t = (key: string, params?: Record<string, any>) =>
     (params ? i18n.global.t(key, params) : i18n.global.t(key)) as string
@@ -58,6 +59,11 @@ function getHttpErrorMessage(status: number): string {
 const isAuthEndpoint = (url: string) =>
     /\/auth\/(login|register|telegram\/login|telegram\/miniapp\/login|telegram\/oidc\/start|telegram\/oidc\/callback|forgot-password)/.test(url)
 
+const clearUserSession = () => {
+    removeSessionItem('user_token')
+    removeSessionItem('user_profile')
+}
+
 function createClient(injectAuth: boolean) {
     const baseURL = `${API_BASE_URL}${API_PREFIX}`
     const timeout = 10000
@@ -82,7 +88,7 @@ function createClient(injectAuth: boolean) {
         }
 
         if (injectAuth) {
-            const token = localStorage.getItem('user_token')
+            const token = getSessionItem('user_token')
             if (token) {
                 headers['Authorization'] = `Bearer ${token}`
             }
@@ -137,8 +143,7 @@ function createClient(injectAuth: boolean) {
                 const message = getHttpErrorMessage(status)
                 if (status === 401) {
                     if (injectAuth && !isAuthEndpoint(path)) {
-                        localStorage.removeItem('user_token')
-                        localStorage.removeItem('user_profile')
+                        clearUserSession()
                         window.location.href = '/auth/login'
                     }
                 }
@@ -154,8 +159,7 @@ function createClient(injectAuth: boolean) {
             const status = response.status
             const message = data?.msg || getHttpErrorMessage(status)
             if (status === 401 && injectAuth && !isAuthEndpoint(path)) {
-                localStorage.removeItem('user_token')
-                localStorage.removeItem('user_profile')
+                clearUserSession()
                 window.location.href = '/auth/login'
             }
             console.error('HTTP Error:', message)
@@ -165,8 +169,7 @@ function createClient(injectAuth: boolean) {
         // Business error check
         if (typeof data.status_code !== 'undefined' && data.status_code !== 0) {
             if (data.status_code === 401 && injectAuth && !isAuthEndpoint(path)) {
-                localStorage.removeItem('user_token')
-                localStorage.removeItem('user_profile')
+                clearUserSession()
                 window.location.href = '/auth/login'
                 return Promise.reject(new Error(t('common.api.unauthorized')))
             }

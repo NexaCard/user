@@ -57,7 +57,7 @@
           </header>
 
           <!-- Post Content -->
-          <div v-html="processHtmlForDisplay(getLocalizedText(post.content))"
+          <div v-html="sanitizeHtmlForDisplay(getLocalizedText(post.content))"
             class="prose prose-lg max-w-none dark:prose-invert theme-prose">
           </div>
 
@@ -131,7 +131,7 @@ import { useI18n } from 'vue-i18n'
 import { useAppStore } from '../stores/app'
 import { postAPI } from '../api'
 import { getImageUrl } from '../utils/image'
-import { processHtmlForDisplay } from '../utils/content'
+import { sanitizeHtmlForDisplay } from '../utils/content'
 import { debounceAsync } from '../utils/debounce'
 import { useLocalized } from '../composables/useProduct'
 import { usePageSeo } from '../composables/usePageSeo'

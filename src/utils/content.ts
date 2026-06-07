@@ -1,4 +1,17 @@
 import { getImageUrl } from './image'
+import DOMPurify from 'dompurify'
+
+const DISPLAY_HTML_ALLOWED_TAGS = [
+    'p', 'br', 'strong', 'em', 'u', 's', 'code', 'pre', 'blockquote',
+    'ul', 'ol', 'li', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'span', 'div', 'img', 'hr', 'table', 'thead', 'tbody', 'tr', 'td', 'th',
+    'colgroup', 'col',
+]
+
+const DISPLAY_HTML_ALLOWED_ATTR = [
+    'href', 'target', 'rel', 'src', 'alt', 'title', 'style',
+    'colspan', 'rowspan', 'width', 'height', 'class',
+]
 
 /**
  * 将 HTML 内容中的图片路径转换为显示用的绝对路径
@@ -11,6 +24,16 @@ export function processHtmlForDisplay(html: string): string {
     // 使用非贪婪匹配 .*?
     return html.replace(/src=["'](\/uploads\/.*?)["']/g, (_, path) => {
         return `src="${getImageUrl(path)}"`
+    })
+}
+
+export function sanitizeHtmlForDisplay(html: string): string {
+    const withImages = processHtmlForDisplay(String(html || ''))
+    return DOMPurify.sanitize(withImages, {
+        ALLOWED_TAGS: DISPLAY_HTML_ALLOWED_TAGS,
+        ALLOWED_ATTR: DISPLAY_HTML_ALLOWED_ATTR,
+        ALLOW_DATA_ATTR: false,
+        ALLOWED_URI_REGEXP: /^(?:https?:|mailto:|tel:|#|\/(?!\/))/i,
     })
 }
 

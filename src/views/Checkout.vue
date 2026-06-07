@@ -319,6 +319,7 @@ import { useCartStore, type CartItem } from '../stores/cart'
 import { useBuyNowStore } from '../stores/buyNow'
 import { useAppStore } from '../stores/app'
 import { useUserAuthStore } from '../stores/userAuth'
+import { saveGuestOrderAuth } from '../utils/guestOrderAuth'
 import { guestOrderAPI, userOrderAPI, walletAPI, type CaptchaPayload } from '../api'
 import { debounceAsync } from '../utils/debounce'
 import { pageAlertClass, type PageAlert } from '../utils/alerts'
@@ -1144,10 +1145,10 @@ const handleSubmit = async () => {
         order_password: guestPassword.value,
         captcha_payload: getGuestCaptchaPayload(),
       })
-      localStorage.setItem('guest_order_auth', JSON.stringify({
+      saveGuestOrderAuth({
         email: guestEmail.value.trim(),
         order_password: guestPassword.value,
-      }))
+      })
       responseData = response.data.data
     }
 
