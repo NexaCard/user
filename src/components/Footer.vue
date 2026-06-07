@@ -165,11 +165,12 @@ const footerLinks = computed(() => {
   const links = config.value?.footer_links
   if (!Array.isArray(links)) return []
   return links
-    .map((item: any) => ({
-      name: typeof item?.name === 'string' ? item.name.trim() : '',
-      url: normalizeSafeWebUrl(item?.url),
-    }))
-    .filter((item) => item.name && item.url)
+    .map((item: any) => {
+      const name = typeof item?.name === 'string' ? item.name.trim() : ''
+      const url = normalizeSafeWebUrl(item?.url) || undefined
+      return { name, url }
+    })
+    .filter((item): item is { name: string; url: string } => Boolean(item.name && item.url))
 })
 
 const currentYear = new Date().getFullYear()
