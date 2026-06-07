@@ -14,6 +14,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useUserAuthStore } from '../../stores/userAuth'
 import { userProfileAPI } from '../../api'
+import { normalizeInternalPath } from '../../utils/url'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -27,7 +28,7 @@ onMounted(async () => {
   const state = String(route.query.state || '')
   const oauthErr = String(route.query.error || '')
   const intent = sessionStorage.getItem('tg_oidc_intent') || 'login'
-  const savedRedirect = sessionStorage.getItem('tg_oidc_redirect') || ''
+  const savedRedirect = normalizeInternalPath(sessionStorage.getItem('tg_oidc_redirect') || '')
   sessionStorage.removeItem('tg_oidc_intent')
   sessionStorage.removeItem('tg_oidc_redirect')
 

@@ -1,5 +1,6 @@
 const WEB_ALLOWED_PROTOCOLS = new Set(['http:', 'https:', 'mailto:', 'tel:', 'tg:'])
 const PAYMENT_DENIED_PROTOCOLS = new Set(['javascript:', 'data:', 'vbscript:', 'file:', 'blob:'])
+const TRUSTED_TELEGRAM_OAUTH_HOSTS = new Set(['oauth.telegram.org', 'telegram.org'])
 
 const hasControlChars = (value: string) => /[\u0000-\u001F\u007F]/.test(value)
 
@@ -32,6 +33,20 @@ export const normalizeSafePaymentUrl = (rawUrl: unknown): string | null => {
     const base = typeof window !== 'undefined' ? window.location.origin : 'https://nexacard.local'
     const url = new URL(value, base)
     if (PAYMENT_DENIED_PROTOCOLS.has(url.protocol)) return null
+    return url.href
+  } catch {
+    return null
+  }
+}
+
+export const normalizeTrustedTelegramOAuthUrl = (rawUrl: unknown): string | null => {
+  const value = String(rawUrl || '').trim()
+  if (!value || hasControlChars(value)) return null
+  try {
+    const url = new URL(value)
+    if (url.protocol !== 'https:') return null
+    if (!TRUSTED_TELEGRAM_OAUTH_HOSTS.has(url.hostname.toLowerCase())) return null
+    if (url.username || url.password) return null
     return url.href
   } catch {
     return null

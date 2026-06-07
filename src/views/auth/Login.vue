@@ -316,6 +316,7 @@ import ImageCaptcha from '../../components/captcha/ImageCaptcha.vue'
 import TurnstileCaptcha from '../../components/captcha/TurnstileCaptcha.vue'
 import FormField from '../../components/FormField.vue'
 import { useFormValidation } from '../../composables/useFormValidation'
+import { normalizeInternalPath, normalizeTrustedTelegramOAuthUrl } from '../../utils/url'
 
 const router = useRouter()
 const route = useRoute()
@@ -400,7 +401,7 @@ const handleCaptchaConfigStale = async () => {
 }
 
 const redirectAfterLogin = () => {
-  const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/me/orders'
+  const redirect = normalizeInternalPath(typeof route.query.redirect === 'string' ? route.query.redirect : '') || '/me/orders'
   return router.push(redirect)
 }
 
@@ -603,19 +604,19 @@ const startTelegramOidc = async () => {
   error.value = ''
   try {
     sessionStorage.removeItem('tg_oidc_intent')
-    const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : ''
+    const redirect = normalizeInternalPath(typeof route.query.redirect === 'string' ? route.query.redirect : '')
     if (redirect) {
       sessionStorage.setItem('tg_oidc_redirect', redirect)
     } else {
       sessionStorage.removeItem('tg_oidc_redirect')
     }
     const res = await userAuthAPI.telegramOidcStart()
-    const url = String(res?.data?.data?.auth_url || '')
+    const url = normalizeTrustedTelegramOAuthUrl(res?.data?.data?.auth_url)
     if (!url) {
       error.value = t('auth.login.telegramLoginFailed')
       return
     }
-    window.location.href = url
+    window.location.assign(url)
   } catch (err: any) {
     error.value = err?.message || t('auth.login.telegramLoginFailed')
   }

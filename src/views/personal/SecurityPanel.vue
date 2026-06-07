@@ -87,6 +87,7 @@ import { useTelegramMiniAppStore } from '../../stores/telegramMiniApp'
 import { useUserProfileStore } from '../../stores/userProfile'
 import { useUserAuthStore } from '../../stores/userAuth'
 import { buildTelegramMiniAppEntryLink, openTelegramCompatibleLink } from '../../utils/telegramMiniApp'
+import { normalizeTrustedTelegramOAuthUrl } from '../../utils/url'
 import TelegramBindingSection from '../../components/security/TelegramBindingSection.vue'
 import EmailChangeForm from '../../components/security/EmailChangeForm.vue'
 import LoginHistorySection from '../../components/security/LoginHistorySection.vue'
@@ -428,7 +429,7 @@ const startTelegramOidcBind = async () => {
   try {
     sessionStorage.setItem('tg_oidc_intent', 'bind')
     const res = await userProfileAPI.telegramOidcBindStart()
-    const url = String(res?.data?.data?.auth_url || '')
+    const url = normalizeTrustedTelegramOAuthUrl(res?.data?.data?.auth_url)
     if (!url) {
       securityAlert.value = {
         level: 'error',
@@ -436,7 +437,7 @@ const startTelegramOidcBind = async () => {
       }
       return
     }
-    window.location.href = url
+    window.location.assign(url)
   } catch (err: any) {
     securityAlert.value = {
       level: 'error',
