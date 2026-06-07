@@ -12,7 +12,7 @@
             <Transition name="banner-fade" mode="out-in">
               <img v-if="!bannerLoading && heroImage" :src="heroImage" :key="heroImage" class="absolute inset-0 h-full w-full object-cover" />
             </Transition>
-            <div class="absolute inset-0 bg-gradient-to-br from-black/72 via-slate-950/54 to-cyan-950/42"></div>
+            <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(3,17,29,0.78),rgba(3,17,29,0.48)_54%,rgba(7,31,48,0.68))]"></div>
             <div v-if="bannerLoading" class="relative flex min-h-[200px] flex-col justify-between p-5 sm:min-h-[240px] sm:p-6 md:min-h-[320px] md:p-10">
               <div class="space-y-3">
                 <div class="h-5 w-24 theme-skeleton rounded-full" style="background: rgba(255,255,255,0.35)"></div>
@@ -186,7 +186,7 @@
           <Transition name="banner-fade" mode="out-in">
             <img v-if="!bannerLoading && heroImage" :src="heroImage" :key="heroImage" class="absolute inset-0 h-full w-full object-cover" />
           </Transition>
-          <div class="absolute inset-0 bg-gradient-to-br from-black/74 via-slate-950/56 to-cyan-950/42"></div>
+          <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(3,17,29,0.8),rgba(3,17,29,0.5)_54%,rgba(7,31,48,0.68))]"></div>
 
             <div v-if="bannerLoading" class="relative flex min-h-[260px] flex-col justify-between p-5 sm:min-h-[320px] sm:p-6 md:min-h-[420px] md:p-12">
             <div class="mb-4 flex items-center justify-end">
@@ -248,7 +248,7 @@
               <button
                 type="button"
                 @click="goToHeroLink"
-                class="inline-flex min-h-[40px] items-center gap-2 rounded-lg bg-cyan-300 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:scale-105 hover:bg-cyan-200 sm:min-h-[44px] sm:px-5 sm:py-3"
+                class="nexa-hero-primary inline-flex min-h-[40px] items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 sm:min-h-[44px] sm:px-5 sm:py-3"
               >
                 {{ heroPrimaryButtonText }}
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -258,7 +258,7 @@
               <router-link
                 v-if="!hasHeroLink"
                 to="/products"
-                class="inline-flex min-h-[40px] items-center rounded-lg border border-white/30 px-4 py-2.5 text-sm font-medium text-white transition hover:border-cyan-200 hover:bg-white/10 sm:min-h-[44px] sm:px-5 sm:py-3"
+                class="inline-flex min-h-[40px] items-center rounded-lg border border-white/30 px-4 py-2.5 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:border-white/55 hover:bg-white/10 sm:min-h-[44px] sm:px-5 sm:py-3"
               >
                 {{ t('home.featured.viewAll') }}
               </router-link>

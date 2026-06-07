@@ -12,11 +12,11 @@
       <img v-if="product.images && getFirstImageUrl(product.images)" :src="getFirstImageUrl(product.images)"
         :alt="getLocalizedText(product.title)" loading="lazy"
         class="w-full h-full object-cover transition-transform duration-500"
-        :class="isSoldOut(product) ? 'grayscale brightness-75' : 'group-hover:scale-110'" />
+        :class="isSoldOut(product) ? 'grayscale brightness-75' : 'group-hover:scale-[1.035]'" />
       <img v-else-if="product.category?.icon" :src="getImageUrl(product.category.icon)"
         :alt="getLocalizedText(product.category?.name)" loading="lazy"
         class="w-full h-full object-cover transition-transform duration-500"
-        :class="isSoldOut(product) ? 'grayscale brightness-75' : 'group-hover:scale-110'" />
+        :class="isSoldOut(product) ? 'grayscale brightness-75' : 'group-hover:scale-[1.035]'" />
       <div v-else class="w-full h-full flex items-center justify-center theme-surface-muted theme-text-muted">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -107,7 +107,7 @@
         class="relative flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg border transition-all flex-shrink-0"
         :class="isSoldOut(product)
           ? 'opacity-40 cursor-not-allowed border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-600'
-          : 'border-gray-200 dark:border-gray-700 text-gray-500 hover:text-gray-900 hover:border-gray-400 hover:bg-gray-100 dark:hover:text-white dark:hover:border-gray-500 dark:hover:bg-gray-800'"
+          : 'theme-btn-ghost'"
         :disabled="isSoldOut(product)"
         @click.stop="$emit('quickBuy', product)"
       >

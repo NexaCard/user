@@ -8,16 +8,16 @@
     @click="$emit('click', product.slug)">
     <!-- Image Area -->
     <div class="aspect-[4/3] overflow-hidden theme-surface-muted relative shrink-0">
-      <div class="pointer-events-none absolute inset-x-0 top-0 z-20 h-16 bg-gradient-to-b from-black/38 to-transparent"></div>
+      <div class="pointer-events-none absolute inset-x-0 top-0 z-20 h-14 bg-gradient-to-b from-black/24 to-transparent"></div>
       <div
         class="absolute inset-0 z-10 transition-colors duration-300"
-        :class="isSoldOut(product) ? 'bg-black/15' : 'bg-black/15 group-hover:bg-black/5'"
+        :class="isSoldOut(product) ? 'bg-black/18' : 'bg-black/8 group-hover:bg-black/0'"
       ></div>
       <img v-if="displayImageSrc && !imageErrored" :src="displayImageSrc"
         :alt="getLocalizedText(product.title)" loading="lazy" decoding="async"
         class="w-full h-full object-cover transform transition-transform duration-700 ease-out"
         :class="[
-          isSoldOut(product) ? 'grayscale brightness-75' : 'group-hover:scale-105',
+          isSoldOut(product) ? 'grayscale brightness-75' : 'group-hover:scale-[1.025]',
         ]"
         @error="handleImageError" />
       <div v-else class="w-full h-full flex items-center justify-center theme-text-muted" role="img"
@@ -28,7 +28,7 @@
         </svg>
       </div>
 
-      <div v-if="isSoldOut(product)" class="absolute inset-0 z-20 bg-black/45"></div>
+      <div v-if="isSoldOut(product)" class="absolute inset-0 z-20 bg-black/42"></div>
       <div v-if="isSoldOut(product)"
         class="absolute left-2 top-2 md:left-4 md:top-4 z-30 theme-badge theme-badge-solid-danger text-xs font-bold tracking-wider shadow-sm">
         {{ t('products.stockStatus.outOfStock') }}
@@ -143,7 +143,7 @@
             class="relative flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-lg border transition-all"
             :class="isSoldOut(product)
               ? 'opacity-40 cursor-not-allowed border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-600'
-              : 'border-gray-200 dark:border-gray-700 text-gray-500 hover:text-primary-hover hover:border-primary/40 hover:bg-primary-soft dark:hover:text-primary-hover dark:hover:border-primary/40 dark:hover:bg-primary-soft'"
+              : 'theme-btn-ghost'"
             :disabled="isSoldOut(product)"
             :aria-disabled="isSoldOut(product)"
             @click.stop="$emit('quickBuy', product)"
@@ -157,7 +157,7 @@
             class="hidden md:flex text-xs uppercase font-bold transition-colors items-center gap-1"
             :class="isSoldOut(product)
               ? 'text-rose-500/90 dark:text-rose-300/90'
-              : 'text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white'">
+              : 'theme-text-muted group-hover:text-gray-900 dark:group-hover:text-white'">
             <svg class="w-4 h-4 transition-transform" :class="isSoldOut(product) ? '' : 'group-hover:translate-x-1'" fill="none"
               stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
