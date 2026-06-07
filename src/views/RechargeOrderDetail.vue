@@ -151,6 +151,7 @@ import { useI18n } from 'vue-i18n'
 import { walletAPI } from '../api/wallet'
 import { useTelegramMiniAppStore } from '../stores/telegramMiniApp'
 import { basisPointsToPercent, rateToBasisPoints } from '../utils/money'
+import { normalizeSafePaymentUrl, openSafeUrl } from '../utils/url'
 import QRCode from 'qrcode'
 
 const { t } = useI18n()
@@ -303,15 +304,15 @@ const stopPolling = () => {
 }
 
 const handleOpenPayLink = () => {
-  if (!payLink.value) return
+  const safePayLink = normalizeSafePaymentUrl(payLink.value)
+  if (!safePayLink) return
   if (isTelegramMiniApp.value) {
-    try {
-      window.Telegram?.WebApp?.openLink?.(payLink.value)
-    } catch {
-      window.open(payLink.value, '_blank')
+    const opened = telegramMiniAppStore.openLink(safePayLink)
+    if (!opened) {
+      openSafeUrl(safePayLink, { payment: true })
     }
   } else {
-    window.open(payLink.value, '_blank')
+    openSafeUrl(safePayLink, { payment: true })
   }
 }
 

@@ -225,6 +225,7 @@ import { useAppStore } from '../stores/app'
 import { useCartStore } from '../stores/cart'
 import { useUserAuthStore } from '../stores/userAuth'
 import { useTheme } from '../utils/theme'
+import { normalizeInternalPath, normalizeSafeWebUrl } from '../utils/url'
 import { SunIcon, MoonIcon } from '@heroicons/vue/24/outline'
 
 const { t, locale } = useI18n()
@@ -296,16 +297,19 @@ const buildCustomNavItems = (): NavItem[] => {
     .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
     .map((item) => {
       const icon = (presetIcons[item.icon as string] || defaultIcon) as string
+      const type = item.link_type === 'external' ? 'link' as const : 'route' as const
+      const path = type === 'link' ? normalizeSafeWebUrl(item.url) : normalizeInternalPath(item.url)
+      if (!path) return null
       return {
         key: `custom-${item.id}`,
-        path: item.url || '',
+        path,
         label: getCustomItemTitle(item),
         icon,
-        type: item.link_type === 'external' ? 'link' as const : 'route' as const,
-        target: item.target || '_self',
+        type,
+        target: type === 'link' && item.target === '_self' ? '_self' : '_blank',
       }
     })
-    .filter((item) => item.label && item.path)
+    .filter((item): item is NavItem => !!item && !!item.label)
 }
 
 const buildBuiltinNavItems = (): NavItem[] => {

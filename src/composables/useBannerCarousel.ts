@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { bannerAPI } from '../api'
 import { getImageUrl } from '../utils/image'
+import { normalizeInternalPath, normalizeSafeWebUrl, openSafeUrl } from '../utils/url'
 import { useLocalized } from './useProduct'
 
 export function useBannerCarousel() {
@@ -125,12 +126,21 @@ export function useBannerCarousel() {
       router.push('/products')
       return
     }
-    const isExternal = /^https?:\/\//i.test(heroLink.value)
-    if (isExternal || heroOpenInNewTab.value) {
-      window.open(heroLink.value, heroOpenInNewTab.value ? '_blank' : '_self')
+    const linkType = String(heroBanner.value?.link_type || '').toLowerCase()
+    const isExternal = linkType === 'external' || Boolean(normalizeSafeWebUrl(heroLink.value) && /^[a-z][a-z0-9+.-]*:/i.test(heroLink.value.trim()))
+
+    if (isExternal) {
+      openSafeUrl(heroLink.value, { newTab: heroOpenInNewTab.value })
       return
     }
-    router.push(heroLink.value)
+
+    const internalPath = normalizeInternalPath(heroLink.value)
+    if (!internalPath) return
+    if (heroOpenInNewTab.value) {
+      openSafeUrl(internalPath)
+      return
+    }
+    router.push(internalPath)
   }
 
   const loadBanners = async () => {

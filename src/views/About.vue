@@ -47,7 +47,7 @@
             {{ contactText }}
           </p>
           <div v-if="hasContactLinks" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <a v-if="contactConfig?.telegram" :href="contactConfig.telegram" target="_blank" rel="noopener noreferrer"
+            <a v-if="telegramContactUrl" :href="telegramContactUrl" target="_blank" rel="noopener noreferrer"
               class="group flex items-center justify-center space-x-3 theme-surface-soft border theme-border theme-text-secondary px-6 py-4 rounded-xl transition-colors hover:theme-text-primary">
               <svg class="w-6 h-6 text-sky-500" fill="currentColor" viewBox="0 0 24 24">
                 <path
@@ -55,7 +55,7 @@
               </svg>
               <span class="font-bold">Telegram</span>
             </a>
-            <a v-if="contactConfig?.whatsapp" :href="contactConfig.whatsapp" target="_blank" rel="noopener noreferrer"
+            <a v-if="whatsappContactUrl" :href="whatsappContactUrl" target="_blank" rel="noopener noreferrer"
               class="group flex items-center justify-center space-x-3 theme-surface-soft border theme-border theme-text-secondary px-6 py-4 rounded-xl transition-colors hover:theme-text-primary">
               <svg class="w-6 h-6 text-emerald-500" fill="currentColor" viewBox="0 0 24 24">
                 <path
@@ -75,6 +75,7 @@ import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '../stores/app'
 import { usePageSeo } from '../composables/usePageSeo'
+import { normalizeSafeWebUrl } from '../utils/url'
 
 const { t, locale } = useI18n()
 const appStore = useAppStore()
@@ -86,6 +87,8 @@ usePageSeo({
 
 const aboutConfig = computed(() => appStore.config?.about || null)
 const contactConfig = computed(() => appStore.config?.contact || null)
+const telegramContactUrl = computed(() => normalizeSafeWebUrl(contactConfig.value?.telegram))
+const whatsappContactUrl = computed(() => normalizeSafeWebUrl(contactConfig.value?.whatsapp))
 
 const resolveLocalizedText = (raw: unknown): string => {
   if (!raw || typeof raw !== 'object') {
@@ -125,7 +128,7 @@ const serviceItems = computed(() => {
 
 const hasIntroduction = computed(() => introductionText.value !== '')
 const hasServices = computed(() => servicesTitle.value !== '' || serviceItems.value.length > 0)
-const hasContactLinks = computed(() => !!(contactConfig.value?.telegram || contactConfig.value?.whatsapp))
+const hasContactLinks = computed(() => !!(telegramContactUrl.value || whatsappContactUrl.value))
 const hasContact = computed(() => contactTitle.value !== '' || contactText.value !== '' || hasContactLinks.value)
 
 onMounted(async () => {

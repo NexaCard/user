@@ -47,7 +47,7 @@
         <div>
           <h4 class="theme-text-primary font-bold mb-6 tracking-wide">{{ t('footer.contact') }}</h4>
           <div class="space-y-4">
-            <a v-if="config?.contact?.telegram" :href="config.contact.telegram" target="_blank"
+            <a v-if="telegramContactUrl" :href="telegramContactUrl" target="_blank"
               rel="noopener noreferrer"
               class="flex items-center space-x-3 text-sm hover:text-gray-900 dark:hover:text-white transition-colors p-3 rounded-lg bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 border border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10">
               <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
@@ -56,7 +56,7 @@
               </svg>
               <span>Telegram</span>
             </a>
-            <a v-if="config?.contact?.whatsapp" :href="config.contact.whatsapp" target="_blank"
+            <a v-if="whatsappContactUrl" :href="whatsappContactUrl" target="_blank"
               rel="noopener noreferrer"
               class="flex items-center space-x-3 text-sm hover:text-gray-900 dark:hover:text-white transition-colors p-3 rounded-lg bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 border border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10">
               <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 24 24">
@@ -98,8 +98,8 @@
             <a
               v-for="link in footerLinks"
               :key="link.name"
-              :href="link.url || 'javascript:void(0)'"
-              :target="link.url ? '_blank' : undefined"
+              :href="link.url"
+              target="_blank"
               rel="noopener noreferrer"
               class="hover:text-gray-900 dark:hover:text-gray-400"
             >{{ link.name }}</a>
@@ -114,11 +114,14 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '../stores/app'
+import { normalizeSafeWebUrl } from '../utils/url'
 
 const { t } = useI18n()
 const appStore = useAppStore()
 
 const config = computed(() => appStore.config)
+const telegramContactUrl = computed(() => normalizeSafeWebUrl(config.value?.contact?.telegram))
+const whatsappContactUrl = computed(() => normalizeSafeWebUrl(config.value?.contact?.whatsapp))
 
 const brandSiteName = computed(() => {
   const siteName = config.value?.brand?.site_name
@@ -161,7 +164,12 @@ const quickLinks = computed(() => {
 const footerLinks = computed(() => {
   const links = config.value?.footer_links
   if (!Array.isArray(links)) return []
-  return links.filter((item: any) => item && typeof item.name === 'string' && item.name.trim())
+  return links
+    .map((item: any) => ({
+      name: typeof item?.name === 'string' ? item.name.trim() : '',
+      url: normalizeSafeWebUrl(item?.url),
+    }))
+    .filter((item) => item.name && item.url)
 })
 
 const currentYear = new Date().getFullYear()

@@ -1,4 +1,5 @@
 import type { TelegramWebApp, TelegramWebAppThemeParams } from '../types/telegram-webapp'
+import { normalizeSafePaymentUrl, openSafeUrl } from './url'
 
 const TELEGRAM_WEB_APP_SCRIPT_URL = 'https://telegram.org/js/telegram-web-app.js?61'
 const TELEGRAM_ROOT_DATASET_KEY = 'telegramMiniApp'
@@ -141,18 +142,24 @@ export const initializeTelegramWebApp = (): TelegramMiniAppSnapshot => {
 }
 
 export const openTelegramCompatibleLink = (url: string, options: { tryInstantView?: boolean } = {}) => {
-  const target = String(url || '').trim()
-  if (!target) return
+  const target = normalizeSafePaymentUrl(url)
+  if (!target) return false
 
   const webApp = getTelegramWebApp()
   if (webApp?.openLink) {
-    webApp.openLink(target, { try_instant_view: options.tryInstantView === true })
-    return
+    try {
+      webApp.openLink(target, { try_instant_view: options.tryInstantView === true })
+      return true
+    } catch {
+      return openSafeUrl(target, { payment: true })
+    }
   }
 
   if (typeof window !== 'undefined') {
-    window.open(target, '_blank', 'noopener')
+    return openSafeUrl(target, { payment: true })
   }
+
+  return false
 }
 
 

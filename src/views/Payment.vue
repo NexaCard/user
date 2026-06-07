@@ -487,6 +487,7 @@ import { copyText } from '../utils/clipboard'
 import { loadGuestOrderAuth, saveGuestOrderAuth } from '../utils/guestOrderAuth'
 import { amountToCents, basisPointsToPercent, calculateFeeCents, centsToAmount, rateToBasisPoints } from '../utils/money'
 import { buildSkuDisplayTextFromSnapshot } from '../utils/sku'
+import { openSafeUrl } from '../utils/url'
 import PaymentAmountBreakdown from '../components/payment/PaymentAmountBreakdown.vue'
 import PaymentChannelSelector from '../components/payment/PaymentChannelSelector.vue'
 import EmptyState from '../components/EmptyState.vue'
@@ -1168,12 +1169,13 @@ const handleCopyPayLink = async () => {
 
 const openPayLinkInCompatibleWindow = () => {
   if (!payLink.value) return
+  let opened = false
   if (isTelegramMiniApp.value) {
-    telegramMiniAppStore.openLink(payLink.value)
+    opened = telegramMiniAppStore.openLink(payLink.value)
   } else {
-    window.open(payLink.value, '_blank', 'noopener')
+    opened = openSafeUrl(payLink.value, { payment: true })
   }
-  openedPayWindow.value = true
+  openedPayWindow.value = opened
 }
 
 const handleOpenPayLink = () => {

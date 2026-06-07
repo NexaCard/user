@@ -156,7 +156,7 @@ export const useTelegramMiniAppStore = defineStore('telegram-mini-app', () => {
   }
 
   const openLink = (url: string, options: { tryInstantView?: boolean } = {}) => {
-    openTelegramCompatibleLink(url, options)
+    return openTelegramCompatibleLink(url, options)
   }
 
   const reset = () => {
